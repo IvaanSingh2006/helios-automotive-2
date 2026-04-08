@@ -1,0 +1,9 @@
+// TOPIC: Components
+
+export default function Footer() {
+  return (
+    <div className="footer">
+      <p>© 2026 Helios Automotive</p>
+    </div>
+  );
+}
