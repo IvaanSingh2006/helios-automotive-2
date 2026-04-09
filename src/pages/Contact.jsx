@@ -1,5 +1,3 @@
-// TOPIC: State + Props + EmailJS integration
-
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Field from "../components/Field";
