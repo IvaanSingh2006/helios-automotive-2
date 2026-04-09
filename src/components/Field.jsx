@@ -1,14 +1,18 @@
 import React from "react";
-class FieldClass extends React.Component {
+import PropTypes from "prop-types";
+
+class Field extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      value: props.value || ""
     };
   }
 
   handleChange = (e) => {
-    this.setState({ value: e.target.value });
+    const newValue = e.target.value;
+    this.setState({ value: newValue });
+    this.props.onChange(newValue);
   };
 
   render() {
@@ -19,10 +23,15 @@ class FieldClass extends React.Component {
           value={this.state.value}
           onChange={this.handleChange}
         />
-        <p>You typed: {this.state.value}</p>
       </div>
     );
   }
 }
 
-export default FieldClass;
+Field.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
+};
+
+export default Field;

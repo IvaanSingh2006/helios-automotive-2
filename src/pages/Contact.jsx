@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import emailjs from "@emailjs/browser";
+// TOPIC: State + Props + EmailJS integration
 
-const Contact = () => {
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
+import Field from "../components/Field";
+
+export default function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -11,123 +14,75 @@ const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!form.name || !form.email || !form.message) {
+      alert("Please fill all fields");
+      return;
+    }
+
     setLoading(true);
 
-    const formData = {
-      name: form.name,
-      email: form.email,
-      message: form.message
-    };
-
-    emailjs.send(
-      "service_hxvtom9",
-      "template_tnr6x3j",
-      formData,
-      "TN3_SNZoadjQBC8da"
-    )
-    .then(() => {
-      setSubmitted(true);
-      setLoading(false);
-      setForm({ name: "", email: "", message: "" });
-    })
-    .catch(() => {
-      alert("Failed to send");
-      setLoading(false);
-    });
+    emailjs
+      .send(
+        "service_hxvtom9",
+        "template_tnr6x3j",
+        form,
+        "TN3_SNZoadjQBC8da"
+      )
+      .then(() => {
+        setSubmitted(true);
+        setLoading(false);
+        setForm({ name: "", email: "", message: "" });
+      })
+      .catch(() => {
+        alert("Failed to send message");
+        setLoading(false);
+      });
   };
 
   return (
-    <div style={styles.container}>
+    <div className="container">
       <h2>Contact Us</h2>
 
       {submitted ? (
-        <p style={styles.success}>
-            Message received! Check your email.
+        <p className="success">
+          Message received! Check your email.
         </p>
       ) : (
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
+        <form onSubmit={handleSubmit} className="form">
+
+          <Field
+            label="Name"
             value={form.name}
-            onChange={handleChange}
-            required
-            style={styles.input}
+            onChange={(value) =>
+              setForm({ ...form, name: value })
+            }
           />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
+          <Field
+            label="Email"
             value={form.email}
-            onChange={handleChange}
-            required
-            style={styles.input}
+            onChange={(value) =>
+              setForm({ ...form, email: value })
+            }
           />
 
           <textarea
-            name="message"
-            placeholder="Your Message"
+            className="input"
+            placeholder="Message"
             value={form.message}
-            onChange={handleChange}
-            required
-            style={styles.textarea}
+            onChange={(e) =>
+              setForm({ ...form, message: e.target.value })
+            }
           />
 
-          <button type="submit" disabled={loading} style={styles.button}>
+          <button type="submit" disabled={loading}>
             {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
       )}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "500px",
-    margin: "50px auto",
-    padding: "20px",
-    borderRadius: "10px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-    textAlign: "center"
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px"
-  },
-  input: {
-    padding: "10px",
-    fontSize: "16px"
-  },
-  textarea: {
-    padding: "10px",
-    fontSize: "16px",
-    minHeight: "100px"
-  },
-  button: {
-    padding: "12px",
-    fontSize: "16px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    cursor: "pointer"
-  },
-  success: {
-    color: "green",
-    fontWeight: "bold"
-  }
-};
-
-export default Contact;
+}

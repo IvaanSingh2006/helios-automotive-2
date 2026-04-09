@@ -81,3 +81,35 @@ body {
   margin: 10px 0;
   font-weight: bold;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.input,
+textarea {
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  padding: 10px;
+  background-color: #c41e3a;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #a3152d;
+}
+
+.success {
+  color: green;
+  margin-top: 15px;
+  font-weight: bold;
+}
